@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eve's AI Academy</title>
+<style>
+:root{--lav:#a99af7;--peri:#c5c8ff;--ink:#302b49;--muted:#77728f;--paper:#fbfaff;--line:#e9e4fb;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#f8f5ff,#f0f3ff);font-family:ui-rounded,"SF Pro Rounded",system-ui,-apple-system,sans-serif;color:var(--ink)}
+header{padding:26px 20px 20px;background:linear-gradient(120deg,#c9baff,#d7dcff);border-bottom:1px solid #e7e0ff}
+.wrap{max-width:1050px;margin:auto} .eyebrow{text-transform:uppercase;letter-spacing:.13em;font-size:11px;font-weight:800;color:#62558e}
+h1{font-size:clamp(27px,5vw,42px);margin:7px 0 5px;letter-spacing:-.04em}header p{margin:0;color:#544b78}
+main{max-width:1050px;margin:0 auto;padding:20px;display:grid;gap:16px}.welcome{background:#fff;border:1px solid var(--line);border-radius:22px;padding:20px;display:flex;justify-content:space-between;gap:12px;align-items:center;box-shadow:0 8px 25px #8f7cda12}
+h2{font-size:19px;margin:0 0 12px}h3{font-size:15px;margin:0 0 8px}.sub{font-size:13px;color:var(--muted)}.pill{border-radius:99px;background:#f0edff;color:#6857a6;padding:7px 10px;font-size:12px;font-weight:750;white-space:nowrap}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:17px;box-shadow:0 6px 20px #8f7cda0b;min-width:0}.big{font-size:28px;font-weight:850;letter-spacing:-.04em}.mini{font-size:12px;color:var(--muted)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}button,.button{border:0;border-radius:12px;padding:10px 13px;background:#8c7be8;color:white;font-weight:750;cursor:pointer;font:inherit;font-size:13px}button.secondary{background:#f0edff;color:#62558e}input,select,textarea{width:100%;border:1px solid #e1dcf4;border-radius:11px;padding:10px;background:#fdfcff;color:var(--ink);font:inherit;font-size:14px;margin:5px 0 10px}label{font-size:12px;font-weight:750;color:#615a7b}form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}form .full{grid-column:1/-1}
+.item{padding:11px 0;border-bottom:1px solid #f0ecfa;display:flex;gap:9px;align-items:flex-start;justify-content:space-between}.item:last-child{border-bottom:0}.item strong{font-size:13px}.item small{display:block;color:var(--muted);margin-top:4px}.status{font-size:11px;background:#f1efff;padding:5px 7px;border-radius:8px;white-space:nowrap}
+.agent{background:linear-gradient(145deg,#fff,#f8f6ff)}.emoji{font-size:23px;margin-bottom:8px}.quizq{font-weight:750;margin:10px 0}.answer{display:block;width:100%;text-align:left;margin:7px 0;background:#f3f0ff;color:#51477a}.answer:hover{background:#e8e1ff}.notice{background:#fff9e9;border:1px solid #f5e6b4;padding:12px 14px;border-radius:14px;font-size:12px;color:#77602a}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:0 20px 28px}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.welcome{align-items:flex-start;flex-direction:column}main{padding:14px}form{grid-template-columns:1fr}.card{padding:15px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="eyebrow">Your personal academic command center</div><h1>💜 Eve’s AI Academy</h1><p>Less school chaos. More “wait, I actually get it.”</p></div></header>
+<main>
+<section class="welcome"><div><div class="eyebrow">Welcome back</div><h2 style="margin:5px 0">You’ve got this.</h2><div class="sub">Plan your work, track deadlines, and practice one step at a time.</div></div><span class="pill" id="today"></span></section>
+<div class="grid">
+<section class="card"><div class="eyebrow">Assignments</div><div class="big" id="todoCount">0</div><div class="mini">unfinished tasks</div></section>
+<section class="card"><div class="eyebrow">Subjects</div><div class="big">3</div><div class="mini">Algebra 1 · Science · History</div></section>
+<section class="card"><div class="eyebrow">Study streak</div><div class="big">✨</div><div class="mini">Small progress counts.</div></section>
+</div>
+<section class="card"><h2>＋ Add an assignment</h2><form id="assignmentForm">
+<div><label for="title">Assignment name</label><input id="title" required placeholder="e.g. Algebra practice"></div>
+<div><label for="subject">Subject</label><select id="subject"><option>Algebra 1</option><option>Science</option><option>History</option><option>ELA</option><option>Other</option></select></div>
+<div><label for="due">Due date</label><input id="due" type="date"></div>
+<div><label for="kind">Type</label><select id="kind"><option>Homework</option><option>Quiz / test</option><option>Project</option><option>Missing work</option></select></div>
+<div class="full"><button type="submit">Add assignment</button></div></form></section>
+<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+<section class="card"><h2>📚 My assignments</h2><div id="assignmentList" class="sub">No assignments yet. Add one above to start your list.</div></section>
+<section class="card"><h2>📝 Grade tracker</h2><p class="sub">Enter grades you want to track. This stays in this browser on this device.</p><form id="gradeForm"><div><label for="gradeSubject">Subject</label><select id="gradeSubject"><option>Algebra 1</option><option>Science</option><option>History</option></select></div><div><label for="gradeValue">Grade (%)</label><input id="gradeValue" type="number" min="0" max="100" required placeholder="e.g. 85"></div><div class="full"><button type="submit">Save grade</button></div></form><div id="gradeList"></div></section>
+</div>
+<section><h2>Meet your study team</h2><div class="grid">
+<article class="card agent"><div class="emoji">🧮</div><h3>Algebra Ace</h3><p class="sub">Breaks Algebra 1 into tiny steps and shows examples before practice.</p><button class="secondary" onclick="showTip('algebra')">Get a study tip</button></article>
+<article class="card agent"><div class="emoji">🔬</div><h3>Science Scholar</h3><p class="sub">Helps explain cells, classification, vocabulary, and science concepts.</p><button class="secondary" onclick="showTip('science')">Get a study tip</button></article>
+<article class="card agent"><div class="emoji">🏛️</div><h3>History Historian</h3><p class="sub">Turns notes into timelines, summaries, and practice questions.</p><button class="secondary" onclick="showTip('history')">Get a study tip</button></article>
+</div><div id="tip" class="card" style="margin-top:12px;display:none"></div></section>
+<section class="card"><h2>⚡ Quick science quiz</h2><div class="sub">Which cell structure contains most of the cell’s DNA and directs cell activities?</div><div id="quizAnswers" class="actions" style="display:block"><button class="answer" onclick="checkAnswer(false)">Mitochondria</button><button class="answer" onclick="checkAnswer(true)">Nucleus</button><button class="answer" onclick="checkAnswer(false)">Cell membrane</button></div><div id="quizResult" class="sub" aria-live="polite"></div><button class="secondary" onclick="resetQuiz()">Try again</button></section>
+<div class="notice">Prototype note: this is a working starter dashboard, not a connected AI service. Assignment and grade data are saved in this browser on this device. Don’t enter passwords, private school login details, or sensitive personal information.</div>
+</main>
+<footer>Eve’s AI Academy · Built for studying, not stressing 💜</footer>
+<script>
+const $=id=>document.getElementById(id);
+$('today').textContent=new Date().toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
+let assignments=[];let grades=[];
+try{assignments=JSON.parse(localStorage.getItem('eveAcademyAssignments')||'[]');grades=JSON.parse(localStorage.getItem('eveAcademyGrades')||'[]')}catch(e){}
+function save(){try{localStorage.setItem('eveAcademyAssignments',JSON.stringify(assignments));localStorage.setItem('eveAcademyGrades',JSON.stringify(grades))}catch(e){}}
+function renderAssignments(){$('todoCount').textContent=assignments.filter(a=>!a.done).length;const list=$('assignmentList');if(!assignments.length){list.textContent='No assignments yet. Add one above to start your list.';list.className='sub';return}list.className='';list.innerHTML='';assignments.forEach((a,i)=>{const row=document.createElement('div');row.className='item';const left=document.createElement('div');const title=document.createElement('strong');title.textContent=a.title;const small=document.createElement('small');small.textContent=a.subject+' · '+a.kind+(a.due?' · Due '+a.due:'');left.append(title,small);const right=document.createElement('div');const done=document.createElement('button');done.className='secondary';done.textContent=a.done?'Undo':'Done';done.onclick=()=>{assignments[i].done=!assignments[i].done;save();renderAssignments()};const del=document.createElement('button');del.className='secondary';del.textContent='×';del.setAttribute('aria-label','Delete assignment');del.onclick=()=>{assignments.splice(i,1);save();renderAssignments()};right.append(done,del);row.append(left,right);list.append(row)})}
+function renderGrades(){const list=$('gradeList');list.innerHTML='';grades.forEach((g,i)=>{const row=document.createElement('div');row.className='item';const txt=document.createElement('strong');txt.textContent=g.subject;const value=document.createElement('span');value.className='status';value.textContent=g.value+'%';const del=document.createElement('button');del.className='secondary';del.textContent='×';del.onclick=()=>{grades.splice(i,1);save();renderGrades()};row.append(txt,value,del);list.append(row)})}
+$('assignmentForm').addEventListener('submit',e=>{e.preventDefault();assignments.push({title:$('title').value.trim(),subject:$('subject').value,due:$('due').value,kind:$('kind').value,done:false});save();renderAssignments();e.target.reset()});
+$('gradeForm').addEventListener('submit',e=>{e.preventDefault();grades.push({subject:$('gradeSubject').value,value:Number($('gradeValue').value)});save();renderGrades();$('gradeValue').value=''});
+function showTip(subject){const tips={algebra:'For literal equations: identify the variable you need, undo operations in reverse order, and do the same thing to both sides. Then check by substituting a value.',science:'Try teach-back: explain the concept in your own words as if you are teaching a stuffed animal. If you get stuck, that’s the exact part to review.',history:'Make a three-column timeline: event, when it happened, and why it mattered. Then cover the last two columns and quiz yourself.'};$('tip').style.display='block';$('tip').textContent=tips[subject]}
+function checkAnswer(correct){$('quizResult').textContent=correct?'Correct! The nucleus contains most of the DNA and helps direct cell activities.':'Not quite. Think of the nucleus as the cell’s control center. Try again!'}
+function resetQuiz(){$('quizResult').textContent=''}
+renderAssignments();renderGrades();
+</script>
+</body></html>
